@@ -19,7 +19,7 @@ class Fullscreen_Window:
 
         ### Settings
         self.setting_frame = LabelFrame(self.tk, text='General Settings')
-        self.setting_frame.grid(row = 0, column = 0, sticky = W, padx=5, pady=5)
+        self.setting_frame.grid(row = 0, column = 0, sticky = W, padx=20, pady=5)
 
         ### Number of Candles slider
         self.N = NUM_CANDLES_0
@@ -43,7 +43,7 @@ class Fullscreen_Window:
 
         ### Rainbow settings
         self.rb_frame = LabelFrame(self.tk, text='Rainbow Settings')
-        self.rb_frame.grid(row=1,column=0, padx=5,pady=5, sticky='W')
+        self.rb_frame.grid(row=1,column=0, padx=20,pady=5, sticky='W')
         self.rainbow_velocity = Scale(self.rb_frame, from_=5, to=120, orient=HORIZONTAL, label='Time Period', length=300, command=self.update_rb_velocity)
         self.rainbow_velocity.set(RAINBOW_VELOCITY_0)
         self.rainbow_velocity.pack()
@@ -79,9 +79,9 @@ class Fullscreen_Window:
         self.set_c2_button.grid(row=6,column=2)
 
         self.save_colors = Button(self.cs_frame, text='Save Colors', command=self.save_color_profile)
-        self.save_colors.grid(row=7,column=0)
+        self.save_colors.grid(row=8,column=1,pady=40)
         self.load_colors = Button(self.cs_frame, text='Load Colors', command=self.load_color_profile)
-        self.load_colors.grid(row=7,column=2)
+        self.load_colors.grid(row=9,column=1,pady=5)
         
 
         ### Candle Preview
@@ -184,9 +184,6 @@ class Fullscreen_Window:
             c2=Color(s[1])
             self.set_C1(c1)
             self.set_C2(c2)
-
-
-
 
 if __name__ == '__main__':
     w = Fullscreen_Window()
