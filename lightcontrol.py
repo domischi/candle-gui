@@ -19,8 +19,8 @@ class LightControl:
         self.N = N
 
         self.mode = MODE_DICT['Rainbow'] ## Rainbow
-        self.c1 = Color('blue') ## For single color use
-        self.c2 = Color('green') ## For single color use
+        self.c1 = Color('white') ## For single color use
+        self.c2 = Color('white') ## For dual color use
         self.rainbow_time_periodicity = RAINBOW_VELOCITY_0  ## How fast the system loops through the rainbow (in seconds)
         self.rainbow_color_shift_per_candle = RAINBOW_OFFSET_0/100. ## How much the rainbow color changes from one candle to the next, in degrees of a HSL scheme (360 is the full spectrum)
 
