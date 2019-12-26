@@ -1,5 +1,6 @@
 import numpy as np
 from tkinter import *
+from tkinter import filedialog
 from tkinter.ttk import Combobox
 import tkinter.ttk as ttk
 from tkinter.colorchooser import *
@@ -77,6 +78,11 @@ class Fullscreen_Window:
         self.set_c2_button = Button(self.cs_frame, text='Set', command=self.update_C2)
         self.set_c2_button.grid(row=6,column=2)
 
+        self.save_colors = Button(self.cs_frame, text='Save Colors', command=self.save_color_profile)
+        self.save_colors.grid(row=7,column=0)
+        self.load_colors = Button(self.cs_frame, text='Load Colors', command=self.load_color_profile)
+        self.load_colors.grid(row=7,column=2)
+        
 
         ### Candle Preview
         self.canvas = Canvas(self.tk, width=self.tk.winfo_screenwidth()-20, height=40, bg='white')
@@ -132,30 +138,54 @@ class Fullscreen_Window:
         s = self.slider_s.get()
         l = self.slider_l.get()
         c = Color(hsl=(h,s,l))
-        width = self.color_preview_canvas.winfo_width()
-        height = self.color_preview_canvas.winfo_height()
-        self.color_preview_canvas.create_rectangle(0,0,width, height, fill=c.hex)
-        self.color_hex['text']=c
+        self.color_selector_c=c
+        self.redraw_color_selectors()
     def update_C1(self):
         h = self.slider_h.get()
         s = self.slider_s.get()
         l = self.slider_l.get()
         c = Color(hsl=(h,s,l))
+        self.set_C1(c)
+    def set_C1(self,c):
         self.c1=c
+        self.lc.c1 = c
         width = self.c1_canvas.winfo_width()
         height = self.c1_canvas.winfo_height()
-        self.c1_canvas.create_rectangle(0,0,width, height, fill=c.hex)
-        self.lc.c1 = c
+        self.c1_canvas.create_rectangle(0,0,width, height, fill=self.c1.hex)
     def update_C2(self):
         h = self.slider_h.get()
         s = self.slider_s.get()
         l = self.slider_l.get()
         c = Color(hsl=(h,s,l))
+        self.set_C2(c)
+    def set_C2(self,c):
         self.c2=c
+        self.lc.c2 =c
         width = self.c2_canvas.winfo_width()
         height = self.c2_canvas.winfo_height()
-        self.c2_canvas.create_rectangle(0,0,width, height, fill=c.hex)
-        self.lc.c2 = c
+        self.c2_canvas.create_rectangle(0,0,width, height, fill=self.c2.hex)
+    def redraw_color_selectors(self):
+        width = self.color_preview_canvas.winfo_width()
+        height = self.color_preview_canvas.winfo_height()
+        self.color_preview_canvas.create_rectangle(0,0,width, height, fill=self.color_selector_c.hex)
+        self.color_hex['text']=self.color_selector_c
+
+    def save_color_profile(self):
+        s=f'{self.c1},{self.c2}'
+        with filedialog.asksaveasfile(defaultextension='.colorprofile') as f:
+            f.write(s)
+        
+    def load_color_profile(self):
+        with filedialog.askopenfile(defaultextension='.colorprofile') as f:
+            s=f.read()
+        if s!=None:
+            s=s.split(',')
+            c1=Color(s[0])
+            c2=Color(s[1])
+            self.set_C1(c1)
+            self.set_C2(c2)
+
+
 
 
 if __name__ == '__main__':
