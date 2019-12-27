@@ -7,14 +7,20 @@ from tkinter.colorchooser import *
 from colour import Color
 import time
 from lightcontrol import *
+from sender import *
 
 class Fullscreen_Window:
     def __init__(self):
         self.tk = Tk()
         self.tk.attributes('-zoomed', True)  # This just maximizes it so we can see the window. It's nothing to do with fullscreen.
+        #self.tk.call('tk', 'scaling', 16.0) # To be adapted to new screen
+
 
         ## Light Control Module
         self.lc = LightControl()
+
+        ## Sender Module
+        self.sender = Sender()
 
 
         ### Settings
@@ -94,7 +100,7 @@ class Fullscreen_Window:
         self.tk.bind("<Escape>", self.end_fullscreen)
         self.tk.attributes("-fullscreen", self.state)
 
-        self.tk.after(0,self.candle_preview)
+        self.tk.after(0,self.update_candles)
         self.update_color_selector()
         self.update_C1()
         self.update_C2()
@@ -109,14 +115,15 @@ class Fullscreen_Window:
         self.tk.attributes("-fullscreen", False)
         return "break"
 
-    def candle_preview(self):
+    def update_candles(self):
         cs = self.lc.generate_light_pattern()
+        self.sender.send_candle_values(cs)
         total_width = self.canvas.winfo_width()
         total_heigth = self.canvas.winfo_height()
         wbox = total_width / self.N
         for i, c in enumerate(cs):
             self.canvas.create_rectangle(i*wbox,0,(i+1)*wbox-1,total_heigth, fill=c.hex)
-        self.tk.after(UPDATE_SPEED,self.candle_preview)
+        self.tk.after(UPDATE_SPEED,self.update_candles)
 
     def update_N(self, val):
         val=int(val)
